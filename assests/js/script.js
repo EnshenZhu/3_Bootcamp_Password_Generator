@@ -35,6 +35,10 @@ function generatePassword(){
     }
   }
   
+  // initialize the passwordElements array, by which the final generated password 
+  // will randomly pick the element from the passwordElements
+  var passwordElements=[];
+
   while (
     passwordConfig.upperCase==null
     ||passwordConfig.lowerCase==null
@@ -44,18 +48,35 @@ function generatePassword(){
     {// Ask the user if he would like to add upperCase letter to the password
     passwordConfig.upperCase=window.confirm("Would you need to add uppercase letter to the password?")
     if (passwordConfig.upperCase==true){
-      
+      passwordElements=passwordElements.concat(upperCase);
     }
 
+    // Ask the user if he would like to add lowercase letter to the password
     passwordConfig.lowerCase=window.confirm("Would you need to add lowercase letter to the password?")
+    if (passwordConfig.lowerCase==true){
+      passwordElements=passwordElements.concat(lowerCase);
+    }
 
     passwordConfig.number=window.confirm("Would you need to add number to the password?")
+    if (passwordConfig.number==true){
+      passwordElements=passwordElements.concat(number);
+    }
 
     passwordConfig.specialChar=window.confirm("Would you need to add special characters (ex. #,!, etc.) to the password?")
+    if (passwordConfig.specialChar==true){
+      passwordElements=passwordElements.concat(specialChar);
+    }
+  }
 
+  console.log(passwordElements)
+  
+  var password=""
+  // generate the password with the loop
+  for (var i=0; i<passwordConfig.length; i++){
+    password=password.concat(passwordElements[Math.floor(Math.random()*passwordElements.length)])
   }
    
-  return passwordConfig.length;
+  return password;
 }
 
 // Write password to the #password input
