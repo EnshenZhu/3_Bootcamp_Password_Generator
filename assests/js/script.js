@@ -18,10 +18,10 @@ function generatePassword(){
   // with the length, upperCase, lowerCase and specialChar sub-elements
   var passwordConfig={
     "length":0,
-    "upperCase":null,
-    "lowerCase":null,
-    "number":null,
-    "specialChar":null
+    "upperCase":false,
+    "lowerCase":false,
+    "number":false,
+    "specialChar":false
   };
 
   // The password length is required to be between 8 to 128 characters
@@ -40,10 +40,10 @@ function generatePassword(){
   var passwordElements=[];
 
   while (
-    passwordConfig.upperCase==null
-    ||passwordConfig.lowerCase==null
-    ||passwordConfig.number==null
-    ||passwordConfig.specialChar==null)
+    passwordConfig.upperCase==false
+    &&passwordConfig.lowerCase==false
+    &&passwordConfig.number==false
+    &&passwordConfig.specialChar==false)
 
     {// Ask the user if he would like to add upperCase letter to the password
     passwordConfig.upperCase=window.confirm("Would you need to add uppercase letter to the password?")
@@ -66,17 +66,112 @@ function generatePassword(){
     if (passwordConfig.specialChar==true){
       passwordElements=passwordElements.concat(specialChar);
     }
+
+    if (
+      passwordConfig.upperCase==false
+      &&passwordConfig.lowerCase==false
+      &&passwordConfig.number==false
+      &&passwordConfig.specialChar==false){
+        window.alert("you must at least pick one types of element for the random password")
+      }
   }
 
-  console.log(passwordElements)
+  console.log("the password drafting pool is "+passwordElements)
   
-  var password=""
+  var passwordTopresent=""
   // generate the password with the loop
   for (var i=0; i<passwordConfig.length; i++){
-    password=password.concat(passwordElements[Math.floor(Math.random()*passwordElements.length)])
+    passwordTopresent=passwordTopresent.concat(passwordElements[Math.floor(Math.random()*passwordElements.length)])
+  }
+
+  // verify if the password meet the requirement of having all designated components
+  
+  // -1- verify on the uppercase letter
+  if (passwordConfig.upperCase==true){
+    var uppercaseVerify=false;
+    // use a double-nested loop to find out 
+    // if the generated password has the uppercase letter
+    loop1: for (var i=0;i<passwordTopresent.length;i++){
+      loop2: for (var j=0;j<upperCase.length;j++){
+
+        if (passwordTopresent[i]===upperCase[j]){
+          uppercaseVerify=true
+          break loop1;
+        };
+      };
+    };
+
+    // if the generated password does not have uppercase letter 
+    // when passwordConfig.upperCase is true, we will re-generate the password
+    if (uppercaseVerify===false){
+      generatePassword();
+    }
+  }
+  
+  // -2- verify on the lowercase letter
+  if (passwordConfig.lowerCase==true){
+    var lowercaseVerify=false;
+    // use a double-nested loop to find out 
+    // if the generated password has the lowercase letter
+    loop1: for (var i=0;i<passwordTopresent.length;i++){
+      loop2: for (var j=0;j<lowerCase.length;j++){
+
+        if (passwordTopresent[i]===lowerCase[j]){
+          lowercaseVerify=true
+          break loop1;
+        };
+      };
+    };
+    // if the generated password does not have lowercase letter 
+    // when passwordConfig.lowerCase is true, we will re-generate the password
+    if (lowercaseVerify===false){
+      generatePassword();
+    }
+  }
+
+  // -2- verify on the number
+  if (passwordConfig.number==true){
+    var numberVerify=false;
+    // use a double-nested loop to find out 
+    // if the generated password has the number
+    loop1: for (var i=0;i<passwordTopresent.length;i++){
+      loop2: for (var j=0;j<number.length;j++){
+
+        if (passwordTopresent[i]===number[j]){
+          numberVerify=true
+          break loop1;
+        };
+      };
+    };
+    // if the generated password does not have number 
+    // when passwordConfig.number is true, we will re-generate the password
+    if (numberVerify===false){
+      generatePassword();
+    }
+  }
+
+  // -4- verify on the special characters
+  if (passwordConfig.specialChar==true){
+    var specialCharVerify=false;
+    // use a double-nested loop to find out 
+    // if the generated password has the special characters
+    loop1: for (var i=0;i<passwordTopresent.length;i++){
+      loop2: for (var j=0;j<specialChar.length;j++){
+
+        if (passwordTopresent[i]===specialChar[j]){
+          specialCharVerify=true
+          break loop1;
+        }
+      };
+    };
+    // if the generated password does not have specail characters
+    // when passwordConfig.specialChar is true, we will re-generate the password
+    if (specialCharVerify===false){
+      generatePassword();
+    }
   }
    
-  return password;
+  return passwordTopresent;
 }
 
 // Write password to the #password input
